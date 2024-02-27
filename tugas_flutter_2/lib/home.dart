@@ -52,8 +52,6 @@ final List<Widget> imageSliders = imgList
           ),
         ))
     .toList();
-int _current = 0;
-final CarouselController _controller = CarouselController();
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -231,41 +229,7 @@ class Home extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Container(
-              height: 300,
-              child: CarouselSlider(
-                items: imageSliders,
-                carouselController: _controller,
-                options: CarouselOptions(
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  aspectRatio: 2.0,
-                  onPageChanged: (index, reason) {
-                    _current = index;
-                  },
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: imgList.asMap().entries.map((entry) {
-                return GestureDetector(
-                  onTap: () => _controller.animateToPage(entry.key),
-                  child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: (Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Colors.black)
-                            .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                  ),
-                );
-              }).toList(),
-            ),
+            CarouselWithIndicatorDemo(),
           ],
         ),
       ),
@@ -318,21 +282,24 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: [
-        Expanded(
+    return Column(
+      children: [
+        Container(
           child: CarouselSlider(
             items: imageSliders,
             carouselController: _controller,
             options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                aspectRatio: 2.0,
-                onPageChanged: (index, reason) {
-                  setState(() {
+              autoPlay: true,
+              enlargeCenterPage: true,
+              aspectRatio: 2.0,
+              onPageChanged: (index, reason) {
+                setState(
+                  () {
                     _current = index;
-                  });
-                }),
+                  },
+                );
+              },
+            ),
           ),
         ),
         Row(
@@ -354,7 +321,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
             );
           }).toList(),
         ),
-      ]),
+      ],
     );
   }
 }
